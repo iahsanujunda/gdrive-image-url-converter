@@ -4,16 +4,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const HomePage = () => {
     const [url, setUrl] = useState('');
-    const [sheetName, setSheetName] = useState('');
     const [convertedUrl, setConvertedUrl] = useState('');
     const [isConvert, setIsConvert] = useState(false)
 
     const handleChangeUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUrl(event.target.value);
-    };
-
-    const handleChangeSheetName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSheetName(event.target.value);
     };
 
     async function copyTextToClipboard(text) {
@@ -42,17 +37,17 @@ const HomePage = () => {
     const handleReset = () => {
         setUrl('')
         setConvertedUrl('')
-        setSheetName('')
         setIsConvert(false)
     }
 
     const handleConvertUrl = () => {
         const found = url.match( /d\/([A-Za-z_\d-]+)/ );
-        
-        if ( found[1].length ) {
-            const convert_url = `https://docs.google.com/spreadsheets/d/${found[1]}/gviz/tq?tqx=out:csv&sheet=${sheetName}`
+        console.log(found)
 
-            setConvertedUrl(convert_url);
+        if ( found[1].length ) {
+            const new_url = `https://drive.google.com/uc?export=view&id=${found[1]}`;
+
+            setConvertedUrl(new_url);
             setIsConvert(true);
         }
     };
@@ -68,11 +63,11 @@ const HomePage = () => {
                         backgroundColor: '#eeecec'
                     }}
                 >
-                    <p>Convert sharing URL of Google spreadsheet to be imported from pandas.read_csv</p>
+                    <p>Convert image sharing URL from Google Drive into an embeddable format</p>
                     <Grid container spacing={1}>
                         <Grid item xs={10}>
                             <TextField
-                                label="Spread Sheet Sharing URL"
+                                label="URL"
                                 fullWidth
                                 value={ url }
                                 onChange={ handleChangeUrl }
@@ -91,18 +86,6 @@ const HomePage = () => {
                                     Reset
                                 </Button>
                             }
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={1} sx={{
-                        marginTop: '16px'
-                    }}>
-                        <Grid item xs={10}>
-                            <TextField
-                                label="Sheet Name"
-                                fullWidth
-                                value={ sheetName }
-                                onChange={ handleChangeSheetName }
-                            />
                         </Grid>
                     </Grid>
                     <Grid container spacing={1} sx={{
